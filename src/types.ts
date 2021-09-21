@@ -6,4 +6,5 @@ export interface weatherType {
   humidity: number;
   icon: string;
   description: string;
+  condition: string;
 }
