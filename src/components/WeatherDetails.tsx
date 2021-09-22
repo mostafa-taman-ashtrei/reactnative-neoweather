@@ -27,7 +27,7 @@ const WeatherDetails: React.FC<props> = ({ weatherData }) => {
 
       <View>
         <Text style={[styles.tempText, { color: colors[condition] }]}>
-          {Math.floor(temp)}°
+          {Math.round(temp)}°
           <Image style={styles.weatherIcon} source={{ uri: iconUrl }} />
         </Text>
       </View>

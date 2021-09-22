@@ -1,13 +1,14 @@
+import { Box, Heading, HStack, Spinner, Toast } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import RNLocation from 'react-native-location';
 import { getWeather } from '../api';
 import { weatherType } from '../types';
 import WeatherDetails from './WeatherDetails';
+import Search from './Search';
 
 const Weather: React.FC = () => {
-  const [weather, setWeather] = useState<weatherType>();
-  const [error, setError] = useState<string | null>(null);
+  const [weather, setWeather] = useState<weatherType | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -57,6 +58,9 @@ const Weather: React.FC = () => {
   }, []);
 
   const getWeatherByGeoLocation = async (lat: number, long: number) => {
+    setLoading(true);
+    setWeather(null);
+
     const apiRes = await getWeather(lat, long);
 
     if (apiRes.e == null) {
@@ -72,38 +76,36 @@ const Weather: React.FC = () => {
         description: weatherData.weather[0].description,
         condition: weatherData.weather[0].main,
       });
+
+      return setLoading(false);
     }
 
-    return setError(apiRes.e);
+    Toast.show({
+      title: apiRes.e,
+      bgColor: 'red.500',
+    });
+
+    return setLoading(false);
   };
 
   console.log(weather);
 
   return (
-    <View style={styles.container}>
-      {error ? (
-        <Text style={{ color: 'white', backgroundColor: 'red' }}>{error}</Text>
-      ) : null}
-      {weather && error == null ? (
-        <WeatherDetails weatherData={weather} />
-      ) : (
-        // <Button onPress={getLocation} title="Get Weather At my location" />
-        <Text style={{ color: 'white', backgroundColor: 'teal' }}>
-          Getting Weather data for your location
-        </Text>
-      )}
-    </View>
+    <>
+      <Search setWeather={setWeather} setLoading={setLoading} />
+      <Box alignItems="center">
+        {loading ? (
+          <HStack space={2} alignItems="center">
+            <Spinner accessibilityLabel="Loading posts" />
+            <Heading color="primary.500" fontSize="md">
+              Getting Weather
+            </Heading>
+          </HStack>
+        ) : null}
+        {weather != null ? <WeatherDetails weatherData={weather} /> : null}
+      </Box>
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000230', // '#272343',
-    justifyContent: 'center',
-    width: '100%',
-    alignItems: 'center',
-  },
-});
 
 export default Weather;

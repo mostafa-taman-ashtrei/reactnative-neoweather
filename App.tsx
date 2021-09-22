@@ -1,26 +1,15 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-
+import { Box, NativeBaseProvider } from 'native-base';
 import Weather from './src/components/Weather';
 
 const App: React.FC = () => {
   return (
-    <View style={styles.container}>
-      <Weather />
-    </View>
+    <NativeBaseProvider>
+      <Box bg="darkBlue.900" width="100%" height="100%">
+        <Weather />
+      </Box>
+    </NativeBaseProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#000',
-  },
-  text: {
-    color: '#fff',
-  },
-});
 
 export default App;
