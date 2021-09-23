@@ -49,6 +49,7 @@ const Search: React.FC<props> = ({ setWeather, setLoading }) => {
         m={5}
         placeholder="City ..."
         color="white"
+        // w={80}
         onChangeText={text => setCity(text)}
         onSubmitEditing={handleSubmit}
       />

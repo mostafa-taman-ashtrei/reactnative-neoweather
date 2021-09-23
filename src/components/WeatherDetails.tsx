@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { ArrowDownIcon, ArrowUpIcon, Box, Image, Text } from 'native-base';
 import { weatherType } from '../types';
 import { colors } from '../utils/weatherConditionColors';
 
@@ -18,53 +18,45 @@ const WeatherDetails: React.FC<props> = ({ weatherData }) => {
     icon,
     condition,
   } = weatherData;
+
   const iconUrl = `https://openweathermap.org/img/wn/${icon}@4x.png`;
 
   return (
-    <View>
-      <Text style={styles.title}>{name}</Text>
-      <Text style={styles.subtitle}>{description}</Text>
+    <Box alignItems="center" w="100%">
+      <Text fontSize={60} color="white">
+        {name}
+      </Text>
+      <Text fontSize={24} color="white">
+        {description}
+      </Text>
 
-      <View>
-        <Text style={[styles.tempText, { color: colors[condition] }]}>
+      <Box bgColor={colors[condition]} m={2}>
+        <Text fontSize={72} color="white">
           {Math.round(temp)}°
-          <Image style={styles.weatherIcon} source={{ uri: iconUrl }} />
+          <Image
+            source={{
+              uri: iconUrl,
+            }}
+            alt="Alternate Text"
+            size="xl"
+          />
         </Text>
-      </View>
+      </Box>
 
-      <Text style={[styles.tempSecText, { color: colors[condition] }]}>
-        Temp Min {tempMin}°
-      </Text>
-      <Text style={[styles.tempSecText, { color: colors[condition] }]}>
-        Temp Max {tempMax}°
-      </Text>
-      <Text style={[styles.tempSecText, { color: colors[condition] }]}>
-        Humidity {humidity}°
-      </Text>
-    </View>
+      <Box alignContent="center">
+        <Text fontSize={22} color="white">
+          <ArrowUpIcon color="white" /> {tempMax}°
+        </Text>
+
+        <Text fontSize={22} color="white">
+          <ArrowDownIcon color="white" /> {tempMin}°
+        </Text>
+        <Text fontSize={22} color="white">
+          Humidity {humidity}°
+        </Text>
+      </Box>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  tempText: {
-    fontSize: 72,
-    color: '#fff',
-  },
-  tempSecText: {
-    fontSize: 22,
-  },
-  title: {
-    fontSize: 60,
-    color: '#fff',
-  },
-  subtitle: {
-    fontSize: 24,
-    color: '#fff',
-  },
-  weatherIcon: {
-    width: 100,
-    height: 100,
-  },
-});
 
 export default WeatherDetails;

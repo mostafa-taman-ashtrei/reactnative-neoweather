@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, Spinner, Toast } from 'native-base';
+import { Box, Center, Heading, HStack, Spinner, Toast } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import RNLocation from 'react-native-location';
 import { getWeather } from '../api';
@@ -19,7 +19,6 @@ const Weather: React.FC = () => {
         },
       });
 
-      console.log(permission);
       let location;
 
       if (!permission) {
@@ -37,7 +36,6 @@ const Weather: React.FC = () => {
         });
 
         location = await RNLocation.getLatestLocation({ timeout: 100 });
-        console.log(location);
 
         getWeatherByGeoLocation(
           Number(location?.latitude),
@@ -45,7 +43,6 @@ const Weather: React.FC = () => {
         );
       } else {
         location = await RNLocation.getLatestLocation({ timeout: 100 });
-        console.log(location);
 
         getWeatherByGeoLocation(
           Number(location?.latitude),
@@ -92,17 +89,23 @@ const Weather: React.FC = () => {
 
   return (
     <>
-      <Search setWeather={setWeather} setLoading={setLoading} />
-      <Box alignItems="center">
+      <Box>
         {loading ? (
-          <HStack space={2} alignItems="center">
-            <Spinner accessibilityLabel="Loading posts" />
-            <Heading color="primary.500" fontSize="md">
-              Getting Weather
-            </Heading>
-          </HStack>
+          <Center>
+            <HStack space={2} alignItems="center" m={8}>
+              <Heading color="primary.500" fontSize="3xl">
+                Loading
+              </Heading>
+              <Spinner />
+            </HStack>
+          </Center>
         ) : null}
-        {weather != null ? <WeatherDetails weatherData={weather} /> : null}
+        {weather != null ? (
+          <>
+            <Search setWeather={setWeather} setLoading={setLoading} />
+            <WeatherDetails weatherData={weather} />
+          </>
+        ) : null}
       </Box>
     </>
   );
